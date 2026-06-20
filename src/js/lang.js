@@ -1,35 +1,31 @@
 // ============================================================
-// lang.js — Multi-language Translation Module
+// lang.js — Multi-language Translation Module (v3)
 // Supports English (en) and Vietnamese (vi)
-// Usage: import { t, setLang, getCurrentLang } from './lang.js'
+// Robust DOM update engine with null-safe element queries
 // ============================================================
 
-// ---- Translation Dictionary ----
+// ============================================================
+// TRANSLATION DICTIONARY
+// ============================================================
 export const translations = {
   en: {
-    // Meta / SEO
-    pageTitle: "Weekly Meal Planner & Grocery List Generator | CUOC STUDIOS",
-
-    // Header
+    pageTitle:    "Weekly Meal Planner & Grocery List Generator | CUOC STUDIOS",
     siteTitle:    "Weekly Meal Planner",
     siteSubtitle: "Plan, Organize & Download Your Weekly Meals in Seconds",
 
-    // Auth
     signInGoogle:   "Sign in with Google",
     signInFacebook: "Sign in with Facebook",
     signingIn:      "Signing in…",
     logout:         "Logout",
-    welcomeBack:    "Welcome back",   // used as "Welcome back, {name}!"
+    welcomeBack:    "Welcome back",
     signedOut:      "You've been signed out.",
 
-    // Auth errors
-    authErrPopupClosed:    "Sign-in cancelled. Please try again.",
-    authErrPopupBlocked:   "Popup was blocked. Allow popups for this site.",
-    authErrAccountExists:  "Account exists with different sign-in method.",
-    authErrNetwork:        "Network error. Check your connection.",
-    authErrGeneric:        "Sign-in failed. Please try again.",
+    authErrPopupClosed:   "Sign-in cancelled. Please try again.",
+    authErrPopupBlocked:  "Popup blocked. Allow popups for this site.",
+    authErrAccountExists: "Account exists with a different sign-in method.",
+    authErrNetwork:       "Network error. Check your connection.",
+    authErrGeneric:       "Sign-in failed. Please try again.",
 
-    // Hero strip
     heroBadge:  "✨ 100% Free — No Registration Required",
     heroText:   "Fill in your meals for the week, add your grocery items, and download a beautiful PDF — all in under 2 minutes.",
     statDay:    "📅 7-Day Planning",
@@ -38,12 +34,10 @@ export const translations = {
     statMobile: "📱 Mobile Friendly",
     statLang:   "🌐 EN / VI",
 
-    // Meal Plan column
     mealPlanTitle: "Weekly Meal Plan",
     mealPlanDesc:  "Plan your Breakfast, Lunch & Dinner for each day",
     clearAll:      "Clear All",
 
-    // Day names (for table header and PDF)
     dayMonday:    "Monday",
     dayTuesday:   "Tuesday",
     dayWednesday: "Wednesday",
@@ -52,59 +46,49 @@ export const translations = {
     daySaturday:  "Saturday",
     daySunday:    "Sunday",
 
-    // Meal types
     breakfast: "Breakfast",
     lunch:     "Lunch",
     dinner:    "Dinner",
 
-    // Meal placeholders
     phBreakfast: "e.g. Oatmeal with berries",
     phLunch:     "e.g. Grilled chicken salad",
     phDinner:    "e.g. Salmon with veggies",
 
-    // Today badge
     todayBadge: "TODAY",
 
-    // Grocery column
-    groceryTitle:   "Grocery List",
-    groceryDesc:    "Add one ingredient per line",
-    groceryHint:    'Tip: Type one item per line, e.g. "2 lbs chicken breast"',
+    groceryTitle:       "Grocery List",
+    groceryDesc:        "Add one ingredient per line",
+    groceryHint:        'Tip: Type one item per line, e.g. "2 lbs chicken breast"',
     groceryPlaceholder: "e.g.\n2 lbs chicken breast\n1 dozen eggs\n1 bag baby spinach\n1 can diced tomatoes\n...",
-    sortAZ:         "Sort A–Z",
-    itemCount:      "{n} item",
-    itemCountPlural:"{n} items",
-    clearBtn:       "Clear",
+    sortAZ:             "Sort A–Z",
+    itemCount:          "{n} item",
+    itemCountPlural:    "{n} items",
+    clearBtn:           "Clear",
 
-    // Action bar
     loadSample:   "Load Sample Plan",
     saveProgress: "Save Progress",
     weekOf:       "Week of",
     downloadPdf:  "Download PDF Plan",
 
-    // Loading
     generatingPdf: "Generating your PDF...",
 
-    // Toasts
-    toastSorted:       "✅ Grocery list sorted A–Z",
+    toastSorted:         "✅ Grocery list sorted A–Z",
     toastGroceryCleared: "🗑️ Grocery list cleared.",
-    toastAllCleared:   "🗑️ All meals cleared.",
-    toastSampleLoaded: "✨ Sample plan loaded! Feel free to customize it.",
-    toastSaved:        "💾 Progress saved to your browser!",
-    toastPdfSuccess:   "🎉 PDF downloaded successfully!",
-    toastPdfError:     "❌ PDF generation failed. Please try again.",
-    toastPdfNotReady:  "⚠️ PDF library not loaded yet. Please wait.",
-    toastThemeLight:   "☀️ Switched to Light Mode",
-    toastThemeDark:    "🌙 Switched to Dark Mode",
+    toastAllCleared:     "🗑️ All meals cleared.",
+    toastSampleLoaded:   "✨ Sample plan loaded! Feel free to customize it.",
+    toastSaved:          "💾 Progress saved to your browser!",
+    toastPdfSuccess:     "🎉 PDF downloaded successfully!",
+    toastPdfError:       "❌ PDF generation failed. Please try again.",
+    toastPdfNotReady:    "⚠️ PDF library not loaded yet. Please wait.",
+    toastThemeLight:     "☀️ Switched to Light Mode",
+    toastThemeDark:      "🌙 Switched to Dark Mode",
 
-    // Confirm dialogs
     confirmClearMeals:   "Clear all meal entries for the week? This cannot be undone.",
     confirmClearGrocery: "Clear the entire grocery list? This cannot be undone.",
     confirmLoadSample:   "Loading the sample plan will replace your current entries. Continue?",
 
-    // Ads
     adLabel: "Advertisement",
 
-    // Footer
     contactTitle:  "Contact",
     featuresTitle: "Features",
     feat1: "📅 7-Day Meal Planning",
@@ -118,27 +102,21 @@ export const translations = {
     contact:   "Contact",
     allRights: "All rights reserved.",
 
-    // PDF strings
-    pdfTitle:          "Weekly Meal Plan",
-    pdfSubtitle:       "Generated by CUOC STUDIOS",
-    pdfGroceryTitle:   "Grocery List",
-    pdfGroceryHint:    "Check off items as you shop!",
-    pdfNoGrocery:      "No grocery items added.",
-    pdfCheckboxLabel:  "[ ]",
-    pdfFooter:         "Weekly Meal Planner | CUOC STUDIOS",
-    pdfPage:           "Page",
-    pdfOf:             "of",
+    pdfTitle:        "Weekly Meal Plan",
+    pdfSubtitle:     "Generated by CUOC STUDIOS",
+    pdfGroceryTitle: "Grocery List",
+    pdfGroceryHint:  "Check off items as you shop!",
+    pdfNoGrocery:    "No grocery items added.",
+    pdfFooter:       "Weekly Meal Planner | CUOC STUDIOS",
+    pdfPage:         "Page",
+    pdfOf:           "of",
   },
 
   vi: {
-    // Meta / SEO
-    pageTitle: "Kế Hoạch Bữa Ăn Tuần & Danh Sách Mua Sắm | CUOC STUDIOS",
-
-    // Header
+    pageTitle:    "Kế Hoạch Bữa Ăn Tuần & Danh Sách Mua Sắm | CUOC STUDIOS",
     siteTitle:    "Kế Hoạch Bữa Ăn Tuần",
     siteSubtitle: "Lên kế hoạch, sắp xếp & tải xuống thực đơn tuần của bạn",
 
-    // Auth
     signInGoogle:   "Đăng nhập bằng Google",
     signInFacebook: "Đăng nhập bằng Facebook",
     signingIn:      "Đang đăng nhập…",
@@ -146,14 +124,12 @@ export const translations = {
     welcomeBack:    "Chào mừng trở lại",
     signedOut:      "Bạn đã đăng xuất thành công.",
 
-    // Auth errors
     authErrPopupClosed:   "Đã hủy đăng nhập. Vui lòng thử lại.",
     authErrPopupBlocked:  "Cửa sổ bật lên bị chặn. Vui lòng cho phép popup.",
     authErrAccountExists: "Tài khoản đã tồn tại với phương thức đăng nhập khác.",
     authErrNetwork:       "Lỗi mạng. Vui lòng kiểm tra kết nối của bạn.",
     authErrGeneric:       "Đăng nhập thất bại. Vui lòng thử lại.",
 
-    // Hero strip
     heroBadge:  "✨ Miễn phí 100% — Không cần đăng ký",
     heroText:   "Điền thực đơn cho cả tuần, thêm danh sách mua sắm và tải xuống PDF đẹp — chỉ trong 2 phút.",
     statDay:    "📅 Kế Hoạch 7 Ngày",
@@ -162,12 +138,10 @@ export const translations = {
     statMobile: "📱 Tương Thích Mobile",
     statLang:   "🌐 Tiếng Anh / Tiếng Việt",
 
-    // Meal Plan column
     mealPlanTitle: "Kế Hoạch Bữa Ăn Tuần",
     mealPlanDesc:  "Lên kế hoạch Sáng, Trưa & Tối cho mỗi ngày",
     clearAll:      "Xóa Tất Cả",
 
-    // Day names
     dayMonday:    "Thứ Hai",
     dayTuesday:   "Thứ Ba",
     dayWednesday: "Thứ Tư",
@@ -176,39 +150,32 @@ export const translations = {
     daySaturday:  "Thứ Bảy",
     daySunday:    "Chủ Nhật",
 
-    // Meal types
     breakfast: "Bữa Sáng",
     lunch:     "Bữa Trưa",
     dinner:    "Bữa Tối",
 
-    // Meal placeholders
     phBreakfast: "vd: Cháo yến mạch với hoa quả",
     phLunch:     "vd: Salad gà nướng",
     phDinner:    "vd: Cá hồi sốt chanh với rau củ",
 
-    // Today badge
     todayBadge: "HÔM NAY",
 
-    // Grocery column
-    groceryTitle:   "Danh Sách Mua Sắm",
-    groceryDesc:    "Thêm mỗi nguyên liệu trên một dòng",
-    groceryHint:    'Mẹo: Mỗi dòng một mặt hàng, vd: "500g ức gà"',
+    groceryTitle:       "Danh Sách Mua Sắm",
+    groceryDesc:        "Thêm mỗi nguyên liệu trên một dòng",
+    groceryHint:        'Mẹo: Mỗi dòng một mặt hàng, vd: "500g ức gà"',
     groceryPlaceholder: "vd:\n500g ức gà\n1 vỉ trứng (10 quả)\n1 bó rau bina\n2 hộp cà chua bi\n...",
-    sortAZ:         "Sắp Xếp A–Z",
-    itemCount:      "{n} mặt hàng",
-    itemCountPlural:"{n} mặt hàng",
-    clearBtn:       "Xóa",
+    sortAZ:             "Sắp Xếp A–Z",
+    itemCount:          "{n} mặt hàng",
+    itemCountPlural:    "{n} mặt hàng",
+    clearBtn:           "Xóa",
 
-    // Action bar
     loadSample:   "Tải Mẫu Thực Đơn",
     saveProgress: "Lưu Tiến Độ",
     weekOf:       "Tuần",
     downloadPdf:  "Tải Xuống PDF",
 
-    // Loading
     generatingPdf: "Đang tạo PDF...",
 
-    // Toasts
     toastSorted:         "✅ Danh sách đã được sắp xếp A–Z",
     toastGroceryCleared: "🗑️ Đã xóa danh sách mua sắm.",
     toastAllCleared:     "🗑️ Đã xóa tất cả bữa ăn.",
@@ -220,15 +187,12 @@ export const translations = {
     toastThemeLight:     "☀️ Đã chuyển sang Chế Độ Sáng",
     toastThemeDark:      "🌙 Đã chuyển sang Chế Độ Tối",
 
-    // Confirm dialogs
     confirmClearMeals:   "Xóa toàn bộ bữa ăn trong tuần? Không thể hoàn tác.",
     confirmClearGrocery: "Xóa toàn bộ danh sách mua sắm? Không thể hoàn tác.",
     confirmLoadSample:   "Tải thực đơn mẫu sẽ thay thế dữ liệu hiện tại. Tiếp tục?",
 
-    // Ads
     adLabel: "Quảng Cáo",
 
-    // Footer
     contactTitle:  "Liên Hệ",
     featuresTitle: "Tính Năng",
     feat1: "📅 Lên Kế Hoạch 7 Ngày",
@@ -242,98 +206,110 @@ export const translations = {
     contact:   "Liên Hệ",
     allRights: "Mọi quyền được bảo lưu.",
 
-    // PDF strings
-    pdfTitle:         "Kế Hoạch Bữa Ăn Tuần",
-    pdfSubtitle:      "Tạo bởi CUOC STUDIOS",
-    pdfGroceryTitle:  "Danh Sách Mua Sắm",
-    pdfGroceryHint:   "Đánh dấu các mặt hàng khi mua!",
-    pdfNoGrocery:     "Chưa có mặt hàng nào.",
-    pdfCheckboxLabel: "[ ]",
-    pdfFooter:        "Kế Hoạch Bữa Ăn Tuần | CUOC STUDIOS",
-    pdfPage:          "Trang",
-    pdfOf:            "/",
+    pdfTitle:        "Kế Hoạch Bữa Ăn Tuần",
+    pdfSubtitle:     "Tạo bởi CUOC STUDIOS",
+    pdfGroceryTitle: "Danh Sách Mua Sắm",
+    pdfGroceryHint:  "Đánh dấu các mặt hàng khi mua!",
+    pdfNoGrocery:    "Chưa có mặt hàng nào.",
+    pdfFooter:       "Kế Hoạch Bữa Ăn Tuần | CUOC STUDIOS",
+    pdfPage:         "Trang",
+    pdfOf:           "/",
   },
 };
 
-// ---- State ----
+// ============================================================
+// MODULE STATE
+// ============================================================
 let _currentLang = "en";
 
-// ---- Core API ----
+// ============================================================
+// PUBLIC API
+// ============================================================
 
 /**
- * Get a translation string for the current language.
- * @param {string} key
- * @returns {string}
+ * Translate a key using the current language.
+ * Always returns a string — falls back to English, then the key itself.
  */
 export function t(key) {
-  return translations[_currentLang]?.[key] ?? translations["en"]?.[key] ?? key;
+  return (
+    translations[_currentLang]?.[key] ??
+    translations["en"]?.[key] ??
+    key
+  );
 }
 
-/**
- * Get the current active language code.
- * @returns {"en"|"vi"}
- */
+/** Return the current language code. */
 export function getCurrentLang() {
   return _currentLang;
 }
 
 /**
- * Switch the active language and update all DOM elements with data-i18n attributes.
- * @param {"en"|"vi"} lang
+ * Switch active language, persist to localStorage, and update all
+ * data-i18n / data-i18n-placeholder elements in the DOM.
  */
 export function setLang(lang) {
   if (!translations[lang]) {
-    console.warn(`[lang.js] Unknown language: ${lang}`);
-    return;
+    console.warn(`[lang.js] Unknown language: "${lang}". Falling back to "en".`);
+    lang = "en";
   }
   _currentLang = lang;
-  localStorage.setItem("wmp_lang", lang);
 
-  // Update <html lang="...">
+  try {
+    localStorage.setItem("wmp_lang", lang);
+  } catch (_) { /* localStorage may be unavailable in some browsers */ }
+
+  // Update <html lang="…">
   document.documentElement.lang = lang;
 
   // Update <title>
   document.title = t("pageTitle");
 
-  // Update all elements with data-i18n
+  // Update all elements with [data-i18n]
   document.querySelectorAll("[data-i18n]").forEach((el) => {
     const key = el.getAttribute("data-i18n");
     if (key) el.textContent = t(key);
   });
 
-  // Update all elements with data-i18n-placeholder (textarea / input)
+  // Update all inputs/textareas with [data-i18n-placeholder]
   document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
     const key = el.getAttribute("data-i18n-placeholder");
     if (key) el.placeholder = t(key);
   });
 
-  // Update language switcher button aria-pressed states
+  // Sync lang-btn active state
   document.querySelectorAll(".lang-btn").forEach((btn) => {
-    const isActive = btn.dataset.lang === lang;
-    btn.classList.toggle("active", isActive);
-    btn.setAttribute("aria-pressed", String(isActive));
+    const active = btn.dataset.lang === lang;
+    btn.classList.toggle("active", active);
+    btn.setAttribute("aria-pressed", String(active));
   });
 
-  // Dispatch custom event so other modules can react
+  // Notify other modules (auth.js greeting refresh, app.js table label refresh)
   document.dispatchEvent(new CustomEvent("langchange", { detail: { lang } }));
 }
 
 /**
- * Initialize the language module from localStorage or browser preference.
+ * Read saved language from localStorage or auto-detect from browser,
+ * then call setLang() to fully initialize the UI.
  */
 export function initLang() {
-  const saved = localStorage.getItem("wmp_lang");
-  const browserLang = navigator.language?.startsWith("vi") ? "vi" : "en";
-  const initial = saved || browserLang;
-  setLang(initial);
+  let saved = "en";
+  try {
+    saved = localStorage.getItem("wmp_lang") || "en";
+  } catch (_) {}
+
+  // Auto-detect Vietnamese browser locale for first-time visitors
+  if (!localStorage.getItem("wmp_lang")) {
+    saved = navigator.language?.toLowerCase().startsWith("vi") ? "vi" : "en";
+  }
+
+  setLang(saved);
 }
 
 /**
- * Format the item count string using the correct plural form.
- * @param {number} n
- * @returns {string}
+ * Format item count string with correct plural form.
+ * Template uses {n} as placeholder.
  */
 export function formatItemCount(n) {
   const tpl = n === 1 ? t("itemCount") : t("itemCountPlural");
-  return tpl.replace("{n}", n);
+  return tpl.replace("{n}", String(n));
 }

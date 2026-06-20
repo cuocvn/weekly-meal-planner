@@ -1,89 +1,88 @@
 // ============================================================
-// pdfGen.js — PDF Generation Module (v2)
-// Bilingual A4 PDF via jsPDF (UMD CDN build)
-// Reads active language from lang.js t() function
+// pdfGen.js — Bilingual PDF Generation Module (v3)
+// Uses jsPDF loaded via CDN (window.jspdf UMD global)
+// Language-aware: reads getCurrentLang() at call time
 // ============================================================
 
 import { t, getCurrentLang } from "./lang.js";
 
 /**
- * Generate and download a beautifully formatted A4 PDF.
- * @param {Array}  mealData     - Array of day objects: { day, date, isToday, breakfast, lunch, dinner }
- * @param {Array}  groceryItems - Array of non-empty grocery strings
- * @param {string} weekRange    - Human-readable week range label
+ * Generate and auto-download a formatted A4 PDF.
+ *
+ * @param {Array<{day:string, date:string, isToday:boolean,
+ *                breakfast:string, lunch:string, dinner:string}>} mealData
+ * @param {string[]} groceryItems  — non-empty grocery lines
+ * @param {string}   weekRange     — human-readable week label
  */
 export function generatePDF(mealData, groceryItems, weekRange) {
-  const { jsPDF } = window.jspdf;
-  const lang = getCurrentLang();
+  // Safety check: jsPDF must be loaded via CDN script tag
+  if (!window.jspdf || !window.jspdf.jsPDF) {
+    console.error("[pdfGen.js] jsPDF is not loaded. Check CDN script tag.");
+    throw new Error("jsPDF not available");
+  }
 
-  // ---- Document ----
-  const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-  const pageW  = doc.internal.pageSize.getWidth();   // 210
-  const pageH  = doc.internal.pageSize.getHeight();  // 297
-  const margin = 14;
+  const { jsPDF } = window.jspdf;
+  const lang      = getCurrentLang();
+
+  // ---- Document setup ----
+  const doc    = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+  const pageW  = doc.internal.pageSize.getWidth();   // 210 mm
+  const pageH  = doc.internal.pageSize.getHeight();  // 297 mm
+  const margin  = 14;
   const usableW = pageW - margin * 2;
   let y = 0;
 
-  // ---- Color palette (RGB tuples) ----
+  // ---- Color palette (plain RGB arrays) ----
   const C = {
-    accent:    [99,  102, 241],
-    purple:    [139, 92,  246],
-    green:     [16,  185, 129],
-    amber:     [245, 158, 11 ],
-    violet:    [124, 58,  237],
-    emerald:   [5,   150, 105],
-    dark:      [26,  29,  46 ],
-    gray:      [100, 116, 139],
-    lightGray: [226, 232, 240],
-    accentLt:  [238, 242, 255],
-    surface:   [250, 252, 255],
-    white:     [255, 255, 255],
-    greenLt:   [236, 253, 245],
-    footerText:[200, 210, 255],
+    accent:   [99,  102, 241],
+    purple:   [139, 92,  246],
+    green:    [16,  185, 129],
+    emerald:  [5,   150, 105],
+    amber:    [245, 158, 11 ],
+    dark:     [26,  29,  46 ],
+    gray:     [100, 116, 139],
+    border:   [226, 232, 240],
+    accentLt: [238, 242, 255],
+    surface:  [250, 252, 255],
+    greenLt:  [236, 253, 245],
+    white:    [255, 255, 255],
+    dimText:  [200, 210, 255],
   };
 
-  // ---- Helpers ----
-  const fillColor   = (c) => doc.setFillColor(...c);
-  const strokeColor = (c) => doc.setDrawColor(...c);
-  const textColor   = (c) => doc.setTextColor(...c);
-  const fontSize    = (n) => doc.setFontSize(n);
-  const fontStyle   = (s) => doc.setFont("helvetica", s);
+  // ---- Tiny helpers ----
+  const fc = (c)          => doc.setFillColor(...c);
+  const dc = (c)          => doc.setDrawColor(...c);
+  const tc = (c)          => doc.setTextColor(...c);
+  const fs = (n)          => doc.setFontSize(n);
+  const fw = (s)          => doc.setFont("helvetica", s);
+  const setStyle = (size, weight, color) => { fs(size); fw(weight || "normal"); tc(color || C.dark); };
 
-  const setFont = (size, style, color) => {
-    fontSize(size);
-    fontStyle(style || "normal");
-    textColor(color || C.dark);
-  };
-
-  const rRect = (x, rY, w, h, r, mode = "F") =>
-    doc.roundedRect(x, rY, w, h, r, r, mode);
+  const rr = (x, ry, w, h, r, mode = "F") =>
+    doc.roundedRect(x, ry, w, h, r, r, mode);
 
   // ============================================================
-  // HEADER — Page 1
+  // PAGE 1 — BRANDED HEADER
   // ============================================================
-  // Background gradient simulation (two-tone)
-  fillColor(C.accent);
+  fc(C.accent);
   doc.rect(0, 0, pageW, 44, "F");
-  fillColor(C.purple);
+  fc(C.purple);
   doc.rect(pageW - 44, 0, 44, 44, "F");
 
-  // Decorative circle accent
-  fillColor([80, 70, 220]);
-  doc.ellipse(pageW - 10, 10, 18, 18, "F");
+  // Decorative circle
+  fc([80, 65, 220]);
+  doc.ellipse(pageW - 8, 8, 16, 16, "F");
 
-  // Title
-  setFont(21, "bold", C.white);
-  doc.text(`🥗 ${t("pdfTitle")}`, margin, 18);
+  setStyle(21, "bold", C.white);
+  doc.text(`\uD83E\uDD57 ${t("pdfTitle")}`, margin, 18);
 
-  setFont(9, "normal", C.footerText);
+  setStyle(9, "normal", C.dimText);
   doc.text(`${t("weekOf")} ${weekRange}`, margin, 26);
   doc.text(t("pdfSubtitle"), margin, 32);
   doc.text(
     new Date().toLocaleDateString(lang === "vi" ? "vi-VN" : "en-US", {
       weekday: "long", year: "numeric", month: "long", day: "numeric",
     }),
-    margin,
-    38
+    margin, 38
   );
 
   y = 52;
@@ -91,77 +90,75 @@ export function generatePDF(mealData, groceryItems, weekRange) {
   // ============================================================
   // SECTION TITLE — Meal Plan
   // ============================================================
-  _drawSectionTitle(doc, margin, y, t("mealPlanTitle"), C.accent, rRect, setFont, strokeColor);
-  y += 9;
+  _sectionTitle(doc, margin, y, t("pdfTitle"), C.accent, setStyle);
+  y += 10;
 
   // ============================================================
   // MEAL TABLE
   // ============================================================
   const dayColW  = 30;
   const mealColW = (usableW - dayColW) / 3;
-  const rowH     = 15;
   const hdrH     = 9;
+  const rowH     = 15;
 
-  // Table header row
-  fillColor(C.accent);
-  rRect(margin, y, usableW, hdrH, 2);
-
-  setFont(7, "bold", C.white);
-  doc.text(lang === "vi" ? "NGÀY" : "DAY",   margin + 3, y + 6);
-  doc.text(lang === "vi" ? "☀️ SÁNG"  : "☀️ BREAKFAST", margin + dayColW + 3, y + 6);
-  doc.text(lang === "vi" ? "🌿 TRƯA"  : "🌿 LUNCH",     margin + dayColW + mealColW + 3,  y + 6);
-  doc.text(lang === "vi" ? "🌙 TỐI"   : "🌙 DINNER",    margin + dayColW + mealColW * 2 + 3, y + 6);
+  // Table header
+  fc(C.accent);
+  rr(margin, y, usableW, hdrH, 2);
+  setStyle(7.5, "bold", C.white);
+  doc.text(lang === "vi" ? "NGÀY"   : "DAY",       margin + 3,                          y + 6);
+  doc.text(lang === "vi" ? "☀️ SÁNG" : "☀️ BREAKFAST", margin + dayColW + 3,               y + 6);
+  doc.text(lang === "vi" ? "🌿 TRƯA" : "🌿 LUNCH",     margin + dayColW + mealColW + 3,     y + 6);
+  doc.text(lang === "vi" ? "🌙 TỐI"  : "🌙 DINNER",    margin + dayColW + mealColW * 2 + 3, y + 6);
   y += hdrH;
 
+  // Table rows
   mealData.forEach((item, idx) => {
-    // New page check
+    // Page overflow guard
     if (y + rowH > pageH - 16) {
       doc.addPage();
-      _drawRunningHeader(doc, pageW, C, t, weekRange);
-      y = 50;
+      _runningHeader(doc, pageW, C, t, weekRange, setStyle);
+      y = 48;
     }
 
-    const rowY  = y;
-    const even  = idx % 2 === 0;
+    const even = idx % 2 === 0;
+    fc(item.isToday ? C.accentLt : even ? C.surface : C.white);
+    rr(margin, y, usableW, rowH, 0);
 
-    // Row bg
-    fillColor(item.isToday ? C.accentLt : even ? C.surface : C.white);
-    rRect(margin, rowY, usableW, rowH, 0);
-
-    // Row border
-    strokeColor(C.lightGray);
+    dc(C.border);
     doc.setLineWidth(0.2);
-    doc.rect(margin, rowY, usableW, rowH, "S");
+    doc.rect(margin, y, usableW, rowH, "S");
 
-    // Today left accent bar
     if (item.isToday) {
-      fillColor(C.accent);
-      doc.rect(margin, rowY, 2.5, rowH, "F");
+      fc(C.accent);
+      doc.rect(margin, y, 2.5, rowH, "F");
     }
 
-    // Day name
-    setFont(7.5, "bold", C.dark);
-    doc.text(item.day.slice(0, 3).toUpperCase(), margin + 4, rowY + 6);
-    setFont(6, "normal", C.gray);
-    if (item.date) doc.text(item.date, margin + 4, rowY + 11);
+    // Day label
+    const dayStr  = (item.day || "").slice(0, 3).toUpperCase();
+    setStyle(7.5, "bold", C.dark);
+    doc.text(dayStr, margin + 4, y + 6);
+    if (item.date) {
+      setStyle(6, "normal", C.gray);
+      doc.text(String(item.date), margin + 4, y + 11);
+    }
 
-    // Column separators
-    strokeColor(C.lightGray);
+    // Column separator lines
+    dc(C.border);
     doc.setLineWidth(0.2);
     [dayColW, dayColW + mealColW, dayColW + mealColW * 2].forEach((offset) => {
-      doc.line(margin + offset, rowY, margin + offset, rowY + rowH);
+      doc.line(margin + offset, y, margin + offset, y + rowH);
     });
 
-    // Meal text
-    const renderMeal = (text, xBase) => {
-      const val = text && text.trim() ? text.trim() : "—";
+    // Meal cell text
+    const renderCell = (text, xBase) => {
+      const val   = (text && text.trim()) ? text.trim() : "—";
       const lines = doc.splitTextToSize(val, mealColW - 5);
-      setFont(7, "normal", C.dark);
-      doc.text(lines.slice(0, 2).join(" "), xBase + 3, rowY + 6, { maxWidth: mealColW - 5 });
+      setStyle(7, "normal", C.dark);
+      doc.text(lines.slice(0, 2).join(" "), xBase + 3, y + 6, { maxWidth: mealColW - 5 });
     };
-    renderMeal(item.breakfast, margin + dayColW);
-    renderMeal(item.lunch,     margin + dayColW + mealColW);
-    renderMeal(item.dinner,    margin + dayColW + mealColW * 2);
+    renderCell(item.breakfast, margin + dayColW);
+    renderCell(item.lunch,     margin + dayColW + mealColW);
+    renderCell(item.dinner,    margin + dayColW + mealColW * 2);
 
     y += rowH;
   });
@@ -170,29 +167,29 @@ export function generatePDF(mealData, groceryItems, weekRange) {
   // GROCERY LIST SECTION
   // ============================================================
   y += 14;
+
   if (y + 50 > pageH - 16) {
     doc.addPage();
-    _drawRunningHeader(doc, pageW, C, t, weekRange);
-    y = 50;
+    _runningHeader(doc, pageW, C, t, weekRange, setStyle);
+    y = 48;
   }
 
-  _drawSectionTitle(doc, margin, y, t("pdfGroceryTitle"), C.green, rRect, setFont, strokeColor);
-  y += 9;
+  _sectionTitle(doc, margin, y, t("pdfGroceryTitle"), C.green, setStyle);
+  y += 10;
 
   // Hint strip
-  fillColor(C.greenLt);
-  rRect(margin, y, usableW, 8.5, 2);
-  setFont(7, "italic", C.emerald);
-  doc.text(
-    `${groceryItems.length} ${lang === "vi" ? "mặt hàng" : "item" + (groceryItems.length !== 1 ? "s" : "")} — ${t("pdfGroceryHint")}`,
-    margin + 4,
-    y + 5.8
-  );
+  fc(C.greenLt);
+  rr(margin, y, usableW, 8.5, 2);
+  setStyle(7, "italic", C.emerald);
+  const itemWord  = lang === "vi"
+    ? `${groceryItems.length} mặt hàng`
+    : `${groceryItems.length} item${groceryItems.length !== 1 ? "s" : ""}`;
+  doc.text(`${itemWord} — ${t("pdfGroceryHint")}`, margin + 4, y + 5.8);
   y += 13;
 
-  // Grocery items — 2 columns
+  // Items — 2 columns with checkboxes
   if (groceryItems.length === 0) {
-    setFont(9, "italic", C.gray);
+    setStyle(9, "italic", C.gray);
     doc.text(t("pdfNoGrocery"), margin + 4, y);
     y += 10;
   } else {
@@ -200,54 +197,50 @@ export function generatePDF(mealData, groceryItems, weekRange) {
     const colGap   = 8;
     const grocColW = (usableW - colGap) / numCols;
     const itemH    = 7.5;
-    const numRows  = Math.ceil(groceryItems.length / numCols);
+    let   baseY    = y;
 
     groceryItems.forEach((item, idx) => {
       const col    = idx % numCols;
       const rowIdx = Math.floor(idx / numCols);
       const xPos   = margin + col * (grocColW + colGap);
-      const yPos   = y + rowIdx * itemH;
+      const yPos   = baseY + rowIdx * itemH;
 
-      // Page overflow — only break on new row (col === 0)
+      // New page when column 0 overflows
       if (col === 0 && yPos + itemH > pageH - 16) {
         doc.addPage();
-        _drawRunningHeader(doc, pageW, C, t, weekRange);
-        // Recalculate positions after page break
-        const rowsOnThisPage  = Math.floor((pageH - 66) / itemH);
-        const rowsBefore       = rowIdx;
-        const yOffset = rowsBefore * itemH - (pageH - 66 - itemH);
-        y = 50 - yOffset;
+        _runningHeader(doc, pageW, C, t, weekRange, setStyle);
+        baseY = 48 - rowIdx * itemH;
       }
 
-      const finalY = y + rowIdx * itemH;
+      const finalY = baseY + rowIdx * itemH;
 
-      // Checkbox
-      strokeColor(C.gray);
-      fillColor(C.white);
+      // Checkbox square
+      dc(C.gray);
+      fc(C.white);
       doc.setLineWidth(0.5);
       doc.roundedRect(xPos, finalY - 4.2, 4.5, 4.5, 0.8, 0.8, "FD");
 
-      // Text
-      const label = item.trim();
-      const clipped = doc.splitTextToSize(label, grocColW - 11)[0];
-      setFont(8, "normal", C.dark);
-      doc.text(clipped || label, xPos + 6.5, finalY);
+      // Item text (single line, clipped)
+      const clipped = doc.splitTextToSize((item || "").trim(), grocColW - 11)[0] || "";
+      setStyle(8, "normal", C.dark);
+      doc.text(clipped, xPos + 6.5, finalY);
     });
 
-    y += numRows * itemH + 6;
+    const numRows = Math.ceil(groceryItems.length / numCols);
+    y = baseY + numRows * itemH + 6;
   }
 
   // ============================================================
-  // PAGE FOOTER — all pages
+  // FOOTER on every page
   // ============================================================
   const totalPages = doc.internal.getNumberOfPages();
   for (let p = 1; p <= totalPages; p++) {
     doc.setPage(p);
-    fillColor(C.accent);
+    fc(C.accent);
     doc.rect(0, pageH - 10, pageW, 10, "F");
-    setFont(7, "normal", C.footerText);
+    setStyle(7, "normal", C.dimText);
     doc.text(
-      `${t("pdfFooter")} | ${t("pdfPage")} ${p} ${t("pdfOf")} ${totalPages}`,
+      `${t("pdfFooter")}  |  ${t("pdfPage")} ${p} ${t("pdfOf")} ${totalPages}`,
       pageW / 2,
       pageH - 3.5,
       { align: "center" }
@@ -255,29 +248,30 @@ export function generatePDF(mealData, groceryItems, weekRange) {
   }
 
   // ============================================================
-  // SAVE
+  // SAVE FILE
   // ============================================================
-  const safe = weekRange.replace(/[^a-zA-Z0-9]/g, "_");
-  doc.save(`meal-plan-${safe}.pdf`);
+  const safeRange = weekRange.replace(/[^a-zA-Z0-9]/g, "_");
+  doc.save(`meal-plan-${safeRange}.pdf`);
 }
 
-// ---- Private: section title with underline ----
-function _drawSectionTitle(doc, margin, y, label, color, rRect, setFont, strokeColor) {
-  doc.setFontSize(13);
-  doc.setFont("helvetica", "bold");
-  doc.setTextColor(...color);
+// ---- Private: draw a section title with coloured underline ----
+function _sectionTitle(doc, margin, y, label, color, setStyle) {
+  setStyle(13, "bold", color);
   doc.text(label, margin, y);
   doc.setDrawColor(...color);
   doc.setLineWidth(0.5);
-  doc.line(margin, y + 2, margin + Math.min(label.length * 4.2, 80), y + 2);
+  // Cap underline at 80 mm or full label width estimate
+  const lineW = Math.min(label.length * 3.8, 90);
+  doc.line(margin, y + 2, margin + lineW, y + 2);
 }
 
-// ---- Private: running header on subsequent pages ----
-function _drawRunningHeader(doc, pageW, C, t, weekRange) {
+// ---- Private: minimal running header on continuation pages ----
+function _runningHeader(doc, pageW, C, t, weekRange, setStyle) {
   doc.setFillColor(...C.accent);
   doc.rect(0, 0, pageW, 14, "F");
-  doc.setFontSize(8);
-  doc.setFont("helvetica", "bold");
-  doc.setTextColor(200, 210, 255);
-  doc.text(`🥗 ${t("pdfTitle")} — ${weekRange} (${doc.internal.getCurrentPageInfo().pageNumber})`, 14, 9);
+  setStyle(8, "bold", [200, 210, 255]);
+  doc.text(
+    `\uD83E\uDD57 ${t("pdfTitle")} — ${weekRange}`,
+    14, 9
+  );
 }
