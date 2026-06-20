@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Free Weekly Meal Planner & Grocery List Generator. Plan your 7-day meals and download a beautifully formatted PDF with one click. No signup required." />
-  <meta name="keywords" content="weekly meal planner, meal prep, grocery list generator, free meal planner, healthy eating, meal plan pdf" />
-  <meta name="author" content="Weekly Meal Planner" />
+  <meta name="description" content="Free Weekly Meal Planner & Grocery List Generator. Plan your 7-day meals and download a beautifully formatted PDF. Supports English and Vietnamese." />
+  <meta name="keywords" content="weekly meal planner, meal prep, grocery list generator, free meal planner, kế hoạch bữa ăn, danh sách mua sắm" />
+  <meta name="author" content="CUOC STUDIOS" />
   <meta property="og:title" content="Weekly Meal Planner & Grocery List Generator" />
-  <meta property="og:description" content="Plan your 7-day meals and generate a printable grocery list instantly. Free, fast, and beautiful." />
+  <meta property="og:description" content="Plan your 7-day meals and generate a printable grocery list instantly. Free, fast, and beautiful. English & Vietnamese." />
   <meta property="og:type" content="website" />
-  <title>Weekly Meal Planner & Grocery List Generator | Free Tool</title>
+  <!-- Canonical URL: update YOUR_GITHUB_USERNAME below after first deploy -->
+  <link rel="canonical" href="https://cuocvn.github.io/weekly-meal-planner/public/index.html" />
+  <title>Weekly Meal Planner & Grocery List Generator | CUOC STUDIOS</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -19,177 +21,258 @@
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="../src/css/style.css" />
 
-  <!-- Firebase v10 (Modular CDN) -->
-  <script type="module" src="../src/config.js"></script>
-
   <!-- jsPDF CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
-  <!-- ===== TOP ADSENSE BANNER PLACEHOLDER ===== -->
+  <!-- ================================================================
+    AD SLOT 1 — TOP HEADER BANNER (Leaderboard 728×90 or Responsive)
+    ================================================================
+    HOW TO ACTIVATE:
+      1. Delete the <span class="ad-label"> line below.
+      2. Uncomment the three lines inside this block.
+      3. Replace BOTH instances of ca-pub-XXXXXXXXXXXXXXXX with your
+         real AdSense Publisher ID (e.g. ca-pub-1234567890123456).
+      4. Replace XXXXXXXXXX with the Ad Unit Slot ID for this banner.
+    ================================================================ -->
   <div class="ad-banner-top" aria-label="Advertisement">
-    <div class="ad-placeholder">
-      <!-- Google AdSense: Replace with your actual ad code -->
+    <div class="ad-placeholder" id="ad-top-banner">
+
+      <!-- ▼▼▼ PASTE YOUR ADSENSE CODE HERE — TOP BANNER ▼▼▼ -->
       <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto"></ins>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
-      <span class="ad-label">Advertisement</span>
+      <!-- ▲▲▲ END ADSENSE CODE — TOP BANNER ▲▲▲ -->
+
+      <!-- Remove this placeholder label once your ad code is live: -->
+      <span class="ad-label" data-i18n="adLabel">Advertisement</span>
+
     </div>
   </div>
 
-  <!-- ===== HEADER ===== -->
-  <header class="site-header">
+  <!-- ===== SITE HEADER ===== -->
+  <header class="site-header" role="banner">
     <div class="header-inner">
+
+      <!-- Brand -->
       <div class="header-brand">
         <div class="logo-icon" aria-hidden="true">🥗</div>
         <div class="header-titles">
-          <h1 class="site-title">Weekly Meal Planner</h1>
-          <p class="site-subtitle">Plan, Organize & Download Your Weekly Meals in Seconds</p>
+          <h1 class="site-title" data-i18n="siteTitle">Weekly Meal Planner</h1>
+          <p class="site-subtitle" data-i18n="siteSubtitle">Plan, Organize & Download Your Weekly Meals in Seconds</p>
         </div>
       </div>
 
-      <!-- Auth Section -->
-      <div class="auth-section" id="authSection">
-        <div class="auth-buttons" id="authButtons">
-          <button class="btn btn-google" id="btnGoogleLogin" aria-label="Sign in with Google">
-            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" aria-hidden="true">
-              <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-              <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-              <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-              <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-              <path fill="none" d="M0 0h48v48H0z"/>
-            </svg>
-            Sign in with Google
-          </button>
-          <button class="btn btn-facebook" id="btnFacebookLogin" aria-label="Sign in with Facebook">
-            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-              <path fill="#fff" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-            </svg>
-            Sign in with Facebook
-          </button>
+      <!-- Header Controls: Language + Theme + Auth -->
+      <div class="header-controls">
+
+        <!-- Language Switcher -->
+        <div class="lang-switcher" role="group" aria-label="Language selection">
+          <button
+            class="lang-btn active"
+            id="btnLangEn"
+            data-lang="en"
+            aria-pressed="true"
+            title="English"
+          >🇺🇸 EN</button>
+          <button
+            class="lang-btn"
+            id="btnLangVi"
+            data-lang="vi"
+            aria-pressed="false"
+            title="Tiếng Việt"
+          >🇻🇳 VI</button>
         </div>
-        <div class="auth-user-info hidden" id="authUserInfo">
-          <div class="user-avatar-wrap">
-            <img class="user-avatar" id="userAvatar" src="" alt="User avatar" width="36" height="36" />
-            <span class="user-greeting" id="userGreeting"></span>
+
+        <!-- Theme Toggle -->
+        <button
+          class="theme-toggle"
+          id="themeToggle"
+          aria-label="Toggle dark/light mode"
+          title="Toggle theme"
+        >
+          <span class="theme-icon theme-icon--light" aria-hidden="true">☀️</span>
+          <span class="theme-icon theme-icon--dark" aria-hidden="true">🌙</span>
+          <span class="theme-toggle-track" aria-hidden="true">
+            <span class="theme-toggle-thumb"></span>
+          </span>
+        </button>
+
+        <!-- Auth Section -->
+        <div class="auth-section" id="authSection">
+          <div class="auth-buttons" id="authButtons">
+            <button class="btn btn-google" id="btnGoogleLogin" aria-label="Sign in with Google">
+              <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" aria-hidden="true">
+                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                <path fill="none" d="M0 0h48v48H0z"/>
+              </svg>
+              <span data-i18n="signInGoogle">Sign in with Google</span>
+            </button>
+            <button class="btn btn-facebook" id="btnFacebookLogin" aria-label="Sign in with Facebook">
+              <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#fff" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+              <span data-i18n="signInFacebook">Sign in with Facebook</span>
+            </button>
           </div>
-          <button class="btn btn-logout" id="btnLogout" aria-label="Logout">Logout</button>
+          <div class="auth-user-info hidden" id="authUserInfo">
+            <div class="user-avatar-wrap">
+              <img class="user-avatar" id="userAvatar" src="" alt="User avatar" width="36" height="36" />
+              <span class="user-greeting" id="userGreeting"></span>
+            </div>
+            <button class="btn btn-logout" id="btnLogout" aria-label="Logout">
+              <span data-i18n="logout">Logout</span>
+            </button>
+          </div>
         </div>
-      </div>
-    </div>
+      </div><!-- end .header-controls -->
+
+    </div><!-- end .header-inner -->
   </header>
 
-  <!-- ===== HERO / INTRO STRIP ===== -->
-  <section class="hero-strip">
+  <!-- ===== HERO STRIP ===== -->
+  <section class="hero-strip" aria-label="Introduction">
     <div class="hero-inner">
-      <div class="hero-badge">✨ 100% Free — No Registration Required</div>
-      <p class="hero-text">Fill in your meals for the week, add your grocery items, and download a beautiful PDF — all in under 2 minutes.</p>
-      <div class="hero-stats">
-        <span class="stat-pill">📅 7-Day Planning</span>
-        <span class="stat-pill">📄 PDF Export</span>
-        <span class="stat-pill">🛒 Grocery List</span>
-        <span class="stat-pill">📱 Mobile Friendly</span>
+      <div class="hero-badge" data-i18n="heroBadge">✨ 100% Free — No Registration Required</div>
+      <p class="hero-text" data-i18n="heroText">
+        Fill in your meals for the week, add your grocery items, and download a beautiful PDF — all in under 2 minutes.
+      </p>
+      <div class="hero-stats" aria-label="Key features">
+        <span class="stat-pill" data-i18n="statDay">📅 7-Day Planning</span>
+        <span class="stat-pill" data-i18n="statPdf">📄 PDF Export</span>
+        <span class="stat-pill" data-i18n="statGrocery">🛒 Grocery List</span>
+        <span class="stat-pill" data-i18n="statMobile">📱 Mobile Friendly</span>
+        <span class="stat-pill" data-i18n="statLang">🌐 EN / VI</span>
       </div>
     </div>
   </section>
 
   <!-- ===== MAIN APP AREA ===== -->
-  <main class="app-main" id="mainApp">
+  <main class="app-main" id="mainApp" role="main">
     <div class="app-layout">
 
-      <!-- ===== COLUMN 1: MEAL PLAN TABLE ===== -->
+      <!-- ===== COLUMN 1: MEAL PLAN ===== -->
       <section class="col-meal-plan" aria-labelledby="mealPlanHeading">
         <div class="card">
           <div class="card-header">
             <div class="card-header-icon" aria-hidden="true">📅</div>
-            <div>
-              <h2 class="card-title" id="mealPlanHeading">Weekly Meal Plan</h2>
-              <p class="card-desc">Plan your Breakfast, Lunch & Dinner for each day</p>
+            <div class="card-header-text">
+              <h2 class="card-title" id="mealPlanHeading" data-i18n="mealPlanTitle">Weekly Meal Plan</h2>
+              <p class="card-desc" data-i18n="mealPlanDesc">Plan your Breakfast, Lunch & Dinner for each day</p>
             </div>
-            <button class="btn btn-clear-all" id="btnClearAll" aria-label="Clear all meal inputs" title="Clear all meals">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"></path><path d="M10 11v6M14 11v6"></path><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"></path></svg>
-              Clear All
+            <button class="btn btn-clear-all" id="btnClearAll" aria-label="Clear all meal inputs">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+              <span data-i18n="clearAll">Clear All</span>
             </button>
           </div>
 
-          <div class="meal-table-wrapper" id="mealTableWrapper" role="table" aria-label="Weekly meal plan table">
-            <!-- Days are generated by app.js -->
-          </div>
+          <!-- Meal rows injected by app.js -->
+          <div class="meal-table-wrapper" id="mealTableWrapper" role="table" aria-label="Weekly meal plan table"></div>
         </div>
       </section>
 
-      <!-- ===== SIDEBAR: GROCERY + ADSENSE ===== -->
-      <aside class="col-sidebar">
+      <!-- ===== COLUMN 2: SIDEBAR ===== -->
+      <aside class="col-sidebar" aria-label="Grocery list and advertisements">
 
         <!-- Grocery List Card -->
         <div class="card" aria-labelledby="groceryHeading">
           <div class="card-header">
             <div class="card-header-icon" aria-hidden="true">🛒</div>
-            <div>
-              <h2 class="card-title" id="groceryHeading">Grocery List</h2>
-              <p class="card-desc">Add one ingredient per line</p>
+            <div class="card-header-text">
+              <h2 class="card-title" id="groceryHeading" data-i18n="groceryTitle">Grocery List</h2>
+              <p class="card-desc" data-i18n="groceryDesc">Add one ingredient per line</p>
             </div>
-            <button class="btn btn-clear-all" id="btnClearGrocery" aria-label="Clear grocery list" title="Clear grocery list">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"></path><path d="M10 11v6M14 11v6"></path><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"></path></svg>
-              Clear
+            <button class="btn btn-clear-all" id="btnClearGrocery" aria-label="Clear grocery list">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+              <span data-i18n="clearBtn">Clear</span>
             </button>
           </div>
 
           <div class="grocery-input-area">
             <div class="grocery-hint">
               <span class="hint-icon" aria-hidden="true">💡</span>
-              <span>Tip: Type one item per line, e.g. "2 lbs chicken breast"</span>
+              <span data-i18n="groceryHint">Tip: Type one item per line, e.g. "2 lbs chicken breast"</span>
             </div>
             <textarea
               id="groceryList"
               class="grocery-textarea"
-              placeholder="e.g.&#10;2 lbs chicken breast&#10;1 dozen eggs&#10;1 bag baby spinach&#10;1 can diced tomatoes&#10;..."
               rows="18"
-              aria-label="Grocery list textarea"
+              aria-label="Grocery list"
+              data-i18n-placeholder="groceryPlaceholder"
               spellcheck="true"
             ></textarea>
             <div class="grocery-counter">
-              <span id="groceryCount">0 items</span>
-              <button class="btn-text" id="btnSortGrocery" title="Sort items alphabetically">Sort A–Z</button>
+              <span id="groceryCount" data-i18n-count="0">0 items</span>
+              <button class="btn-text" id="btnSortGrocery" data-i18n="sortAZ">Sort A–Z</button>
             </div>
           </div>
         </div>
 
-        <!-- Sidebar AdSense Placeholder -->
+        <!-- ================================================================
+          AD SLOT 2 — RIGHT SIDEBAR (Medium Rectangle 300×250)
+          ================================================================
+          HOW TO ACTIVATE:
+            1. Delete the <span class="ad-label"> line below.
+            2. Uncomment the three lines inside this block.
+            3. Replace ca-pub-XXXXXXXXXXXXXXXX with your Publisher ID.
+            4. Replace YYYYYYYYYY with the Ad Unit Slot ID for this sidebar.
+          ================================================================ -->
         <div class="ad-sidebar" aria-label="Advertisement">
-          <div class="ad-placeholder ad-placeholder--sidebar">
-            <!-- Google AdSense: Replace with your actual ad code -->
+          <div class="ad-placeholder ad-placeholder--sidebar" id="ad-sidebar">
+
+            <!-- ▼▼▼ PASTE YOUR ADSENSE CODE HERE — SIDEBAR ▼▼▼ -->
             <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto"></ins>
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                 data-ad-slot="YYYYYYYYYY"
+                 data-ad-format="rectangle"
+                 data-full-width-responsive="false"
+                 style="width:300px;height:250px"></ins>
             <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
-            <span class="ad-label">Advertisement</span>
+            <!-- ▲▲▲ END ADSENSE CODE — SIDEBAR ▲▲▲ -->
+
+            <!-- Remove this placeholder label once your ad code is live: -->
+            <span class="ad-label" data-i18n="adLabel">Advertisement</span>
+
           </div>
         </div>
 
       </aside>
     </div><!-- end .app-layout -->
 
-    <!-- ===== ACTION BAR ===== -->
+    <!-- ===== ACTION BAR (sticky) ===== -->
     <div class="action-bar" id="actionBar">
       <div class="action-bar-inner">
         <div class="action-left">
-          <button class="btn btn-sample" id="btnLoadSample" aria-label="Load sample meal plan">
-            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-            Load Sample Plan
+          <button class="btn btn-sample" id="btnLoadSample" aria-label="Load sample plan">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            <span data-i18n="loadSample">Load Sample Plan</span>
           </button>
-          <button class="btn btn-save" id="btnSaveLocal" aria-label="Save plan to browser">
-            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-            Save Progress
+          <button class="btn btn-save" id="btnSaveLocal" aria-label="Save progress">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            <span data-i18n="saveProgress">Save Progress</span>
           </button>
         </div>
         <div class="action-right">
           <div class="week-nav">
-            <span class="week-label" id="weekLabel">Week of <span id="weekDateRange"></span></span>
+            <span class="week-label">
+              <span data-i18n="weekOf">Week of</span>
+              <span id="weekDateRange"></span>
+            </span>
           </div>
-          <button class="btn btn-download" id="btnDownloadPdf" aria-label="Download PDF meal plan">
+          <button class="btn btn-download" id="btnDownloadPdf" aria-label="Download PDF plan">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download PDF Plan
+            <span data-i18n="downloadPdf">Download PDF Plan</span>
           </button>
         </div>
       </div>
@@ -197,41 +280,101 @@
 
   </main><!-- end .app-main -->
 
-  <!-- ===== BOTTOM ADSENSE BANNER ===== -->
+  <!-- ================================================================
+    AD SLOT 3 — BOTTOM FOOTER BANNER (Leaderboard 728×90 or Responsive)
+    ================================================================
+    HOW TO ACTIVATE:
+      1. Delete the <span class="ad-label"> line below.
+      2. Uncomment the three lines inside this block.
+      3. Replace ca-pub-XXXXXXXXXXXXXXXX with your Publisher ID.
+      4. Replace ZZZZZZZZZZ with the Ad Unit Slot ID for this footer.
+    ================================================================ -->
   <div class="ad-banner-bottom" aria-label="Advertisement">
-    <div class="ad-placeholder">
-      <!-- Google AdSense: Replace with your actual ad code -->
-      <span class="ad-label">Advertisement</span>
+    <div class="ad-placeholder" id="ad-bottom-banner">
+
+      <!-- ▼▼▼ PASTE YOUR ADSENSE CODE HERE — BOTTOM BANNER ▼▼▼ -->
+      <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="ZZZZZZZZZZ"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+      <!-- ▲▲▲ END ADSENSE CODE — BOTTOM BANNER ▲▲▲ -->
+
+      <!-- Remove this placeholder label once your ad code is live: -->
+      <span class="ad-label" data-i18n="adLabel">Advertisement</span>
+
     </div>
   </div>
 
-  <!-- ===== FOOTER ===== -->
-  <footer class="site-footer">
+  <!-- ===== SITE FOOTER ===== -->
+  <footer class="site-footer" role="contentinfo">
     <div class="footer-inner">
-      <div class="footer-brand">
-        <span class="footer-logo" aria-hidden="true">🥗</span>
-        <span class="footer-name">Weekly Meal Planner</span>
+
+      <div class="footer-top">
+        <div class="footer-brand-col">
+          <div class="footer-brand">
+            <span class="footer-logo" aria-hidden="true">🥗</span>
+            <span class="footer-name">Weekly Meal Planner</span>
+          </div>
+          <p class="footer-tagline" data-i18n="footerTagline">Plan smarter. Eat better. Shop less.</p>
+          <p class="footer-studio">by <strong>CUOC STUDIOS</strong></p>
+        </div>
+
+        <div class="footer-contact-col">
+          <h3 class="footer-heading" data-i18n="contactTitle">Contact</h3>
+          <ul class="footer-contact-list">
+            <li class="footer-contact-item">
+              <span class="footer-contact-icon" aria-hidden="true">📞</span>
+              <a href="tel:+84937397516" class="footer-contact-link" aria-label="Call +84 937 397 516">
+                +84 937 397 516
+              </a>
+            </li>
+            <li class="footer-contact-item">
+              <span class="footer-contact-icon" aria-hidden="true">✉️</span>
+              <a href="mailto:cuoc2004@gmail.com" class="footer-contact-link" aria-label="Email cuoc2004@gmail.com">
+                cuoc2004@gmail.com
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-features-col">
+          <h3 class="footer-heading" data-i18n="featuresTitle">Features</h3>
+          <ul class="footer-features-list">
+            <li data-i18n="feat1">📅 7-Day Meal Planning</li>
+            <li data-i18n="feat2">📄 PDF Export</li>
+            <li data-i18n="feat3">🛒 Grocery List</li>
+            <li data-i18n="feat4">🌐 English & Vietnamese</li>
+            <li data-i18n="feat5">🌙 Dark / Light Mode</li>
+          </ul>
+        </div>
       </div>
-      <p class="footer-tagline">Plan smarter. Eat better. Shop less.</p>
-      <div class="footer-links">
-        <a href="#" class="footer-link">Privacy Policy</a>
-        <a href="#" class="footer-link">Terms of Service</a>
-        <a href="#" class="footer-link">Contact</a>
+
+      <div class="footer-bottom">
+        <div class="footer-links">
+          <a href="#" class="footer-link" data-i18n="privacy">Privacy Policy</a>
+          <a href="#" class="footer-link" data-i18n="terms">Terms of Service</a>
+          <a href="mailto:cuoc2004@gmail.com" class="footer-link" data-i18n="contact">Contact</a>
+        </div>
+        <p class="footer-copy">© <span id="footerYear"></span> CUOC STUDIOS. <span data-i18n="allRights">All rights reserved.</span></p>
       </div>
-      <p class="footer-copy">&copy; <span id="footerYear"></span> Weekly Meal Planner. All rights reserved.</p>
+
     </div>
   </footer>
 
-  <!-- ===== TOAST NOTIFICATION ===== -->
-  <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+  <!-- ===== TOAST NOTIFICATIONS ===== -->
+  <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true" role="status"></div>
 
   <!-- ===== LOADING OVERLAY ===== -->
   <div class="loading-overlay hidden" id="loadingOverlay" role="status" aria-label="Loading">
     <div class="loading-spinner"></div>
-    <p class="loading-text">Generating your PDF...</p>
+    <p class="loading-text" data-i18n="generatingPdf">Generating your PDF...</p>
   </div>
 
-  <!-- Main JS Modules -->
+  <!-- Main JS (ES Module entry point) -->
   <script type="module" src="../src/js/app.js"></script>
 
 </body>
